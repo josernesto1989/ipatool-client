@@ -45,6 +45,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.pushButton_search.clicked.connect(self.on_search_clicked)
         self.tableView_search_results.setModel(self.view_model)
         self.pushButton_download.clicked.connect(self.on_download_clicked)
+        self.tableView_search_results.doubleClicked.connect(self.on_download_clicked)
         
 
     def on_search_text_changed(self, text):
