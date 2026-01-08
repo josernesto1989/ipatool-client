@@ -69,6 +69,7 @@
     <property name="title">
      <string>Archivo</string>
     </property>
+    <addaction name="actionAutenticar_usuario_sin_2FA"/>
     <addaction name="actionSalir"/>
    </widget>
    <addaction name="menuArchivo"/>
@@ -82,6 +83,11 @@
   <action name="actionSalir">
    <property name="text">
     <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionAutenticar_usuario_sin_2FA">
+   <property name="text">
+    <string>Autenticar usuario sin 2FA</string>
    </property>
   </action>
  </widget>

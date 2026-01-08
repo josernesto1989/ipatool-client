@@ -7,7 +7,7 @@ import re
 import json
 
 ANSI_ESCAPE = re.compile(r'\x1B(?:[@-Z\\-_]|\[[0-?]*[ -/]*[@-~])')
-
+IPATOOL_PATH = "./ipatool"
 
 def clean_ansi(text):
     """Removes ANSI escape sequences from a string."""
@@ -16,7 +16,7 @@ def clean_ansi(text):
 def find_app_by_name(name):
     
     # Define the command to execute
-    command = ["./ipatool", "search", "--limit", "10", name]
+    command = [IPATOOL_PATH, "search", "--limit", "10", name]
 
     # Execute the command and capture the output
     # capture_output=True, text=True are correct.
@@ -77,7 +77,7 @@ def find_app_by_name(name):
 # find_app_by_name( "instagram")
 
 def download_app_by_id(app_id,callback=None):
-    command = ["./ipatool", "purchase", "-b", str(app_id)]  
+    command = [IPATOOL_PATH, "purchase", "-b", str(app_id)]  
     result = subprocess.run(command, capture_output=True, text=True, check=False)
     stdout_output = result.stdout
     stderr_output = result.stderr
@@ -86,16 +86,24 @@ def download_app_by_id(app_id,callback=None):
     print(stdout_output.strip())
     print("\nStandard Error:")
     print(stderr_output.strip())
-    command = ["./ipatool", "download", "-b", str(app_id)]
+    command = [IPATOOL_PATH, "download", "-b", str(app_id)]
     result = subprocess.run(command, capture_output=True, text=True, check=False)
 
     stdout_output = result.stdout
     stderr_output = result.stderr
 
     print("\n--- Download Output ---")
+    output = stdout_output.strip().split('\n')[-1]
+    error = stderr_output.strip().split('\n')[-1]
     print("Standard Output:")
-    print(stdout_output.strip())
+    print(output)
     print("\nStandard Error:")
-    print(stderr_output.strip())
-    if callback:
-        callback()
+    print(error)
+    return [output,error]
+
+def authenticate_user(username, password):
+    command = [IPATOOL_PATH, "auth", "login", "-e", username, "-p", password]
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    stdout_output = result.stdout
+    stderr_output = result.stderr
+    return stdout_output, stderr_output

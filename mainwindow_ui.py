@@ -51,6 +51,9 @@ class Ui_MainWindow(object):
         self.actionCargar.setObjectName("actionCargar")
         self.actionSalir = QtGui.QAction(parent=MainWindow)
         self.actionSalir.setObjectName("actionSalir")
+        self.actionAutenticar_usuario_sin_2FA = QtGui.QAction(parent=MainWindow)
+        self.actionAutenticar_usuario_sin_2FA.setObjectName("actionAutenticar_usuario_sin_2FA")
+        self.menuArchivo.addAction(self.actionAutenticar_usuario_sin_2FA)
         self.menuArchivo.addAction(self.actionSalir)
         self.menubar.addAction(self.menuArchivo.menuAction())
 
@@ -66,3 +69,4 @@ class Ui_MainWindow(object):
         self.menuArchivo.setTitle(_translate("MainWindow", "Archivo"))
         self.actionCargar.setText(_translate("MainWindow", "Cargar"))
         self.actionSalir.setText(_translate("MainWindow", "Salir"))
+        self.actionAutenticar_usuario_sin_2FA.setText(_translate("MainWindow", "Autenticar usuario sin 2FA"))

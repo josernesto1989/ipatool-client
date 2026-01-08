@@ -5,6 +5,7 @@ from PyQt6.QtCore import QUrl, Qt, pyqtSignal
 from PyQt6.QtGui import QAction, QKeySequence
 import ipatool_helper
 import threading
+from auth_window import AuthWindow
 
 class MainWindow(QtWidgets.QMainWindow):
     """
@@ -46,7 +47,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.tableView_search_results.setModel(self.view_model)
         self.pushButton_download.clicked.connect(self.on_download_clicked)
         self.tableView_search_results.doubleClicked.connect(self.on_download_clicked)
-        
+        self.actionAutenticar_usuario_sin_2FA.triggered.connect(self.on_authenticate_user)  
 
     def on_search_text_changed(self, text):
         self.pushButton_search.setEnabled(len(text.strip()) > 3)
@@ -73,3 +74,15 @@ class MainWindow(QtWidgets.QMainWindow):
     
     def download_finished_callback(self,message="Descarga completada"):
         QtWidgets.QMessageBox.information(self, "Descarga", message)
+        
+    def on_authenticate_user(self):
+        auth_window = AuthWindow(self)
+        if auth_window.exec() == QtWidgets.QDialog.DialogCode.Accepted:
+            username, password = auth_window.get_credentials()
+            stdout, stderr = ipatool_helper.authenticate_user(username, password)
+            # print(f'error:{len(stderr)}')
+            # print(f'stdout:{stdout}')
+            # print(f'stderr:{stderr}')
+            message =stdout if len(stderr)==0 else "Autenticación fallida"
+            QtWidgets.QMessageBox.information(self, "Autenticación", message)
+           
