@@ -28,7 +28,7 @@ class AppsViewModel(QAbstractItemModel):
         return self.createIndex(row, column)
     
     def rowCount(self, parent=None):
-        return len(self._apps_dict)
+        return len(self._apps_dict) if self._apps_dict else 0
     
     def data(self, index, role):
         if role == Qt.ItemDataRole.DisplayRole:

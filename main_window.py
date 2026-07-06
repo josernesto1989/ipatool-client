@@ -80,9 +80,9 @@ class MainWindow(QtWidgets.QMainWindow):
         if auth_window.exec() == QtWidgets.QDialog.DialogCode.Accepted:
             username, password = auth_window.get_credentials()
             stdout, stderr = ipatool_helper.authenticate_user(username, password)
-            # print(f'error:{len(stderr)}')
-            # print(f'stdout:{stdout}')
-            # print(f'stderr:{stderr}')
+            print(f'error:{len(stderr)}')
+            print(f'stdout:{stdout}')
+            print(f'stderr:{stderr}')
             message =stdout if len(stderr)==0 else "Autenticación fallida"
             QtWidgets.QMessageBox.information(self, "Autenticación", message)
            

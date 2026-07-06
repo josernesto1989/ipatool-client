@@ -16,11 +16,11 @@ def clean_ansi(text):
 def find_app_by_name(name):
     
     # Define the command to execute
-    command = [IPATOOL_PATH, "search", "--limit", "10", name]
+    command = [IPATOOL_PATH, "search", "--limit", "10", name ]
 
     # Execute the command and capture the output
     # capture_output=True, text=True are correct.
-    result = subprocess.run(command, capture_output=True, text=True, check=False) 
+    result = subprocess.run(command, capture_output=True, text=True, check=False, input="\n") 
 
     stdout_output = result.stdout
     stderr_output = result.stderr
@@ -31,11 +31,16 @@ def find_app_by_name(name):
 
     data = stdout_output.split('=')[1] if len(stdout_output.split('=')) > 1 else None
     data = clean_ansi(data) if data else None
-    data = data[:-5] if len(data)>5 else data  # Remove last 5 characters if data is long enough
+    data = data[:-5] if data and len(data)>5 else data  # Remove last 5 characters if data is long enough
 
     print("--- Initial Extraction Attempt ---")
     print("JSON Data (Initial Attempt):", data)
 
+    if data is None:
+        print("\n--- JSON Decode FAILED ---")
+        print(stderr_output.strip())
+        print("Could not find '=' in the output for JSON extraction.")
+        return None
     start_index = data.find('[')
     end_index = data.rfind(']')
     print(f"Start index: {start_index}, End index: {end_index}")
@@ -103,7 +108,7 @@ def download_app_by_id(app_id,callback=None):
 
 def authenticate_user(username, password):
     command = [IPATOOL_PATH, "auth", "login", "-e", username, "-p", password]
-    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    result = subprocess.run(command, capture_output=True, text=True, check=False, input="\n")
     stdout_output = result.stdout
     stderr_output = result.stderr
     return stdout_output, stderr_output
